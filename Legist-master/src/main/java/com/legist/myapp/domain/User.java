@@ -13,7 +13,7 @@ import java.util.Set;
 @Table(name = "userData")
 public class User extends BaseEntity implements Serializable {
     @Id
-    @GenericGenerator(name = "uid_generator", strategy = "com.enfor.myapp.carcrashmap.util.UIDGenerator")
+    @GenericGenerator(name = "uid_generator", strategy = "com.legist.myapp.util.UIDGenerator")
     @GeneratedValue(generator = "uid_generator")
     private String id;
     @Column(name = "name")
