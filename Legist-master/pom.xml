@@ -11,7 +11,7 @@
 	<groupId>com.enfor.myapp</groupId>
 	<artifactId>carcrashmap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>carcrashmap</name>
+	<name>legist</name>
 	<description>curse project to qualified work</description>
 
 	<properties>
