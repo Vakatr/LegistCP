@@ -11,7 +11,7 @@
 	<groupId>com.enfor.myapp</groupId>
 	<artifactId>carcrashmap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>carcrashmap</name>
+	<name>legist</name>
 	<description>curse project to qualified work</description>
 
 	<properties>
@@ -70,6 +70,15 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 	</dependencies>
 
