@@ -30,10 +30,10 @@ create table user_roles (
     role_id int8
 );
 
-alter table if exists user_roles
+alter table  user_roles
     add constraint fk_user_roles_users
-        foreign key (role_id) references roles;
+        foreign key (role_id) references roles(id);
 
-alter table if exists user_roles
+alter table  user_roles
     add constraint fk_user_users_role
-        foreign key (user_id) references user_data;
+        foreign key (user_id) references user_data(id);
