@@ -48,13 +48,13 @@ public class MessageController {
         return result.size() != 0 ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MessageDto> getOne(@PathVariable("id") Message message) {
         MessageDto result = MessageDto.fromMessage(message);
         return result.getId() != null ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("create/")
+    @PostMapping("/create/")
     @PreAuthorize("hasAnyAuthority(\"ADMIN\", \"MODERATOR\", \"USER\")")
     public ResponseEntity<MessageDto> create(@RequestBody MessageDto messageDto, @AuthenticationPrincipal Principal principal) {
         UserDto userDto = UserDto.fromUser(userService.findByName(principal.getName()));
@@ -63,7 +63,7 @@ public class MessageController {
         return messageDto.getId() != null ? new ResponseEntity<>(messageDto, HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERATOR', 'USER')")
     public ResponseEntity<MessageDto> update(@PathVariable("id") Message messageFromDb,
                           @RequestBody Message message) {
@@ -71,7 +71,7 @@ public class MessageController {
         return result.getId() != null ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERATOR', 'USER')")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Message message = messageRepository.getOne(id);

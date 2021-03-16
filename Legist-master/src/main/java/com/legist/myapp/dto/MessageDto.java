@@ -23,8 +23,6 @@ public class MessageDto {
     private String messageStatus;
     private double x;
     private double y;
-    private CarDto car1;
-    private CarDto car2;
     private String street1;
     private String street2;
     private String typeOfRoadObj;
@@ -43,8 +41,6 @@ public class MessageDto {
         message.setMessageStatus(new MessageStatus(messageStatus));
         message.setX(x);
         message.setY(y);
-        message.setCar1(car1.toCar());
-        message.setCar2(car2.toCar());
         message.setStreet1(new Street(street1));
         message.setStreet2(new Street(street2));
         message.setTypeOfRoadObj(new TypeOfRoadObj(typeOfRoadObj));
@@ -65,8 +61,6 @@ public class MessageDto {
         messageDto.setMessageStatus(message.getMessageStatus().getName());
         messageDto.setX(message.getX());
         messageDto.setY(message.getY());
-        messageDto.setCar1(CarDto.fromCar(message.getCar1()));
-        messageDto.setCar2(CarDto.fromCar(message.getCar2()));
         messageDto.setStreet1(message.getStreet1().getName());
         messageDto.setStreet2(message.getStreet2().getName());
         messageDto.setTypeOfRoadObj(message.getTypeOfRoadObj().getName());
@@ -148,7 +142,7 @@ public class MessageDto {
         this.y = y;
     }
 
-    public CarDto getCar1() {
+  /*  public CarDto getCar1() {
         return car1;
     }
 
@@ -162,7 +156,7 @@ public class MessageDto {
 
     public void setCar2(CarDto car2) {
         this.car2 = car2;
-    }
+    }*/
 
     public String getStreet1() {
         return street1;

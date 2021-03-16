@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "userData")
+@Table(name = "user_data")
 public class User extends BaseEntity implements Serializable {
     @Id
     @GenericGenerator(name = "uid_generator", strategy = "com.legist.myapp.util.UIDGenerator")
