@@ -39,7 +39,7 @@ public class AuthenticationRestController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<Map<Object, Object>> login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getName();
@@ -58,7 +58,7 @@ public class AuthenticationRestController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<UserDto> register(@RequestBody GuestDto guestDto) {
         User newUser = userService.register(guestDto);
         if (newUser != null) {

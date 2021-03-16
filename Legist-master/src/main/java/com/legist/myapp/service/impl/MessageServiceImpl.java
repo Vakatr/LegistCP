@@ -43,8 +43,6 @@ public class MessageServiceImpl implements MessageService {
     public Message createMessage(MessageDto messageDto) {
         Message message = new Message();
         message.setAuthor(userDetailsRepository.findByName(messageDto.getAuthor().getName()));
-        message.setCar1(carService.buildCar(messageDto.getCar1()));
-        message.setCar2(carService.buildCar(messageDto.getCar2()));
         message.setComments(messageDto.getComments().stream()
                 .map(Comments::new)
                 .collect(Collectors.toSet()));

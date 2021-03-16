@@ -8,8 +8,8 @@
 		<version>2.1.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.enfor.myapp</groupId>
-	<artifactId>carcrashmap</artifactId>
+	<groupId>com.legist.myapp</groupId>
+	<artifactId>LegistCP</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>legist</name>
 	<description>curse project to qualified work</description>
@@ -96,6 +96,13 @@
     			<artifactId>springfox-swagger-ui</artifactId>
 	    		<version>2.9.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
