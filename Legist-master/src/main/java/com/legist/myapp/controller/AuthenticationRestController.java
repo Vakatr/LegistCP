@@ -1,5 +1,6 @@
 package com.legist.myapp.controller;
 
+import com.legist.myapp.domain.Role;
 import com.legist.myapp.domain.User;
 import com.legist.myapp.dto.AuthenticationRequestDto;
 import com.legist.myapp.dto.GuestDto;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/auth/")
@@ -44,14 +47,15 @@ public class AuthenticationRestController {
         try {
             String username = requestDto.getName();
             User user = userService.findByName(username);
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             if (user == null) {
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
             }
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             String token = jwtTokenProvider.createToken(username, user.getRoles());
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
             response.put("token", token);
+            response.put("role",getRoleNames(user.getRoles()).get(0));
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
@@ -65,5 +69,12 @@ public class AuthenticationRestController {
             return new ResponseEntity<>(UserDto.fromUser(newUser), HttpStatus.CREATED);
         }
         throw new BadCredentialsException("Invalid username or password");
+    }
+
+    private List<String> getRoleNames(List<Role> userRoles) {
+
+        return userRoles.stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
     }
 }
