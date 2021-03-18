@@ -1,4 +1,5 @@
 <? require $_SERVER['DOCUMENT_ROOT'] . "/blocks/header.php" ?>
+
 <? include "modals/modal-delete.php" ?>
 <table class="news-table">
   <thead>
@@ -34,6 +35,5 @@
     </tr>
   </tfoot>
 </table>
-
 
 <? require $_SERVER['DOCUMENT_ROOT'] . "/blocks/footer.php" ?>

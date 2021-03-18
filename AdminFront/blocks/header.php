@@ -1,3 +1,7 @@
+<? require $_SERVER['DOCUMENT_ROOT'] . "/init.php" ?>
+<? if (substr_count($_SERVER['REQUEST_URI'], '/') <= 2):?>
+  <? include $_SERVER['DOCUMENT_ROOT'] . $_SERVER['REQUEST_URI'] . "/api.php" ?>
+<? endif ?>
 <!DOCTYPE html>
 <html lang='ru'>
 <?
@@ -13,6 +17,9 @@ switch ($URL){
   case '/news/edit/':
    $Title = "Редактирование новости";
   break;
+  case '/users/edit/':
+   $Title = "Редактирование пользователя";
+  break;
   case '/users/':
    $Title = "Пользователи";
   break;
@@ -20,9 +27,11 @@ switch ($URL){
    $Title = "Авторизация";
   break;
  } ?>
+
   <head>
       <meta charset='utf-8'>
-      <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" href="/css/style.css">
       <link rel="stylesheet" href="/css/akrobat.css">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -34,6 +43,8 @@ switch ($URL){
   </head>
 
   <body>
+
+
     <? if (!($URL == "/auth/")): ?>
     <header class="large font-style-header">
         <div class="container">
@@ -53,7 +64,9 @@ switch ($URL){
 
               <div class="col-md-2">
                 <div class="txt-right">
-              	   <a href="#" class="personal">Вернуться на основной сайт</a>
+                  <form method="POST">
+              	     <input type="submit" name="login_out" class="personal" value='Выйти' />
+                 </form>
                 </div>
               </div>
         </div>

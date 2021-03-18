@@ -1,7 +1,5 @@
 $( document ).ready(function() {
-  $('.personal').on('click', function(){
-    alert('Это кнопка');
-  });
+
   var height_header = $('header').height();
   $(window).scroll(function() {
 
