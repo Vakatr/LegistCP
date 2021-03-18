@@ -1,6 +1,6 @@
 <?session_start();
   $GLOBALS['SERVER_URL'];
-  $SERVER_URL = "http://192.168.0.106:8080/api/v1";
+  $SERVER_URL = "https://testserverv.herokuapp.com/api/v1";
   function check_domain_availible($domain)
   {
   if (!filter_var($domain, FILTER_VALIDATE_URL))
