@@ -1,12 +1,16 @@
 package com.legist.myapp.controller;
 
+import com.legist.myapp.domain.Message;
+import com.legist.myapp.domain.Status;
 import com.legist.myapp.domain.User;
+import com.legist.myapp.dto.MessageDto;
 import com.legist.myapp.dto.PasswordChangeDto;
 import com.legist.myapp.dto.UserDto;
 import com.legist.myapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/users/")
@@ -26,7 +31,11 @@ public class UserRestController {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
-
+    @GetMapping
+    public ResponseEntity<List<UserDto>> list() {
+        List<UserDto> result = userService.getAll();
+        return result.size() != 0 ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     @GetMapping(value = "getUser/byId/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") String id){
         User user = userService.findById(id);
@@ -45,6 +54,18 @@ public class UserRestController {
         }
         UserDto result = UserDto.fromUser(user);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity delete(@PathVariable("id") String id) {
+        try {
+            userService.delete(id);
+        }
+        catch(InternalError E){
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(value = "profile")

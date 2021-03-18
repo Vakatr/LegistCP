@@ -4,6 +4,8 @@ import com.legist.myapp.domain.Role;
 import com.legist.myapp.domain.Status;
 import com.legist.myapp.domain.User;
 import com.legist.myapp.dto.GuestDto;
+import com.legist.myapp.dto.MessageDto;
+import com.legist.myapp.dto.UserDto;
 import com.legist.myapp.exceptions.UserNotFoundException;
 import com.legist.myapp.repository.RoleRepository;
 import com.legist.myapp.repository.UserDetailsRepository;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -48,8 +51,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userDetailsRepository.findAll();
+    public List<UserDto> getAll() {
+        return userDetailsRepository.findAll()
+                .stream()
+                .map(UserDto::fromUser)
+                .collect(Collectors.toList());
     }
 
     @Override
