@@ -47,6 +47,11 @@ header.sticky {
 header:hover {
   opacity: 1;
 }
+input[type="text"].auth-login {
+  margin-bottom: -1px;
+border-bottom-right-radius: 0;
+border-bottom-left-radius: 0;
+}
 #arrow-up {
     position: fixed;
     bottom: 10%;
@@ -189,6 +194,40 @@ ul.nav-footer li a.root-item {
 #success div.alert button.close {margin: 8px 0;}
 
 
+div.block-link-site {
+  position: fixed;
+  top: 20%;
+  z-index: 100;
+}
+
+a.inner-block-link {
+  text-align: left;
+  text-decoration: none;
+  font-size: 19px;
+  display: block;
+  width: 185px;
+  height: 100px;
+  padding: 5px 30px;
+  background: #ccc;
+  border: 1px solid #b88785;
+  border-radius: 4px;
+  cursor: pointer;
+
+  transition: all .3s ease-in-out;
+
+  transform: translateX(-95%);
+}
+.inner-block-link:hover {
+  text-decoration: none;
+transform: translateX(1%);
+}
+.btn-add {
+  color: #ffffff !important;
+}
+.block-btn-create {
+  margin-top: 30px;
+}
+
 /* Стили таблицы в новостях и пользователях */
 table.news-table{
   width: 100%;
@@ -258,4 +297,61 @@ table.news-table tfoot   tr td:first-child {
   padding: 3px !important;
 }
 /* END Стили таблицы в новостях и пользователях END */
- 
+
+
+/* Стили формы добавления */
+.label-form {
+  text-align: right;
+}
+.input-control {
+  width: 100%;
+  padding: 5px 15px;
+  border: 1px solid #b88785;
+  border-radius: 6px;
+}
+.input-control:focus {
+
+  border: 1px solid #b88785;
+
+}
+.btn-position {
+  margin: 0px 0 30px;
+  text-align: center;
+}
+.label-form label {
+  font-size: 18px;
+}
+textarea.input-control {
+  min-height: 100px;
+  height: 100px;
+  max-height: 300px;
+}
+textarea.input-control:has {
+  border: 1px solid #b88785;
+}
+.btn-submit {
+  width: 180px;
+  font-size: 17px !important;
+}
+.input-group {
+  margin-bottom: 15px;
+}
+.content-create {
+  width: 80%;
+  margin: auto;
+}
+/* END Стили формы добавления END */
+
+/* Стилизация input type=file */
+i.icon-upload {
+  background: url(/img/icon-upload.png) no-repeat center center;
+  height: 17px;
+  width: 17px;
+  display: inline-block;
+  background-size: contain;
+}
+.upload-style .btn-tertiary{color:#b88785;padding:0;line-height:40px;width:100%;margin:auto;display:block;border:1px solid #b88785;}
+.upload-style .btn-tertiary:hover,.example-2 .btn-tertiary:focus{color:#888;border-color:#888}
+.upload-style .js-input-file{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
+.upload-style .js-input-file + .js-labelFile{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 10px;cursor:pointer}
+/* END Стилизация input type=file END */
