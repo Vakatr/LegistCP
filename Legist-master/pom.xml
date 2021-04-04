@@ -103,6 +103,7 @@
 			<version>2.4.2</version>
 		</dependency>
 
+
 	</dependencies>
 
 	<build>
@@ -110,6 +111,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>4.0.3</version>
 			</plugin>
 		</plugins>
 	</build>
