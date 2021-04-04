@@ -36,4 +36,8 @@
   </tfoot>
 </table>
 
+<div class="txt-right block-btn-create">
+  <a href="create/" class="btn btn-primary btn-add">Добавить новость</a>
+</div>
+
 <? require $_SERVER['DOCUMENT_ROOT'] . "/blocks/footer.php" ?>

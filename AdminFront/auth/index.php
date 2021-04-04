@@ -20,7 +20,7 @@
       <img class="mb-4" src="/img/logo-fullsize.png" alt="" width="300" height="120">
       <h1 class="h3 mb-3 fw-normal">Введите логин и пароль</h1>
 
-      <input type="text" name="inputEmail" class="form-control" value="<?= $_REQUEST['inputEmail']?>" placeholder="Логин" required autofocus>
+      <input type="text" name="inputEmail" class="form-control auth-login" value="<?= $_REQUEST['inputEmail']?>" placeholder="Логин" required autofocus>
 
       <input type="password" name="inputPassword" class="form-control"  placeholder="Пароль" required>
       <div class="checkbox mb-3">

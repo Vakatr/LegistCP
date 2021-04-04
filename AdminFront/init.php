@@ -13,11 +13,11 @@
   $response = curl_exec($curlInit);
   curl_close($curlInit);
   if ($response)
-    return true;
+    return $response;
   return false;
   }
 
-  if (check_domain_availible($SERVER_URL))
+  if (!strpos(check_domain_availible($SERVER_URL), '503') && check_domain_availible($SERVER_URL))
   {
     if ($_SERVER['REQUEST_URI'] != '/auth/' && $_SESSION['user_auth'] == "N")
     {
