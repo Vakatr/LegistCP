@@ -1,10 +1,18 @@
-package com.amr.chatservice.repository;
+package com.legist.myapp.repository;
 
-import com.amr.chatservice.model.ChatRoom;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
+import com.legist.myapp.domain.ChatRoom;
+import com.legist.myapp.domain.User;
+import com.legist.myapp.dto.ChatRoomDto;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 import java.util.Optional;
 
-public interface ChatRoomRepository extends MongoRepository<ChatRoom, String> {
-    Optional<ChatRoom> findBySenderIdAndRecipientId(String senderId, String recipientId);
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
+    ChatRoom findById(Long id);
+    void deleteById(Long id);
+    @Query("SELECT u FROM ChatRoom u WHERE u.initiatorId.id = ?1 or u.recipientId.id = ?1")
+    List<ChatRoom> findChatRoomsById(String id);
 }

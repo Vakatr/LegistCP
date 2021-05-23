@@ -3,90 +3,85 @@ create sequence hibernate_sequence start 1 increment 1;
 create table news (
                          id int8 not null,
                          title varchar(255) not null,
-                         text varchar(2048) not null,
+                         text text not null,
                          date_of_created timestamp default current_timestamp,
                          date_of_updated timestamp,
-                         id_author int8,
+                         id_author varchar(255),
                          primary key (id)
 );
 
+alter table news
+    add constraint news_id_author
+        foreign key (id_author) references user_data(id);
 
-create table brand_of_cars (
+create table chatroom (
                                id int8 not null,
-                               name varchar(255),
+                               initiator_id varchar(255) not null,
+                               recipient_id varchar(255) not null,
                                primary key (id)
 );
 
-create table cars (
+alter table chatroom
+    add constraint chatroom_initiatorId
+        foreign key (initiator_id) references user_data(id);
+
+alter table chatroom
+    add constraint chatroom_recipientId
+        foreign key (recipient_id) references user_data(id);
+
+create table chatMessage (
+                          id int8 not null,
+                          chat_id int8 not null,
+                          sender_id varchar(255) not null,
+                          recipient_id varchar(255) not null,
+                          sender_name varchar(255) not null,
+                          recipient_name varchar(255) not null,
+                          content text,
+                          dateMessage timestamp,
+                          primary key (id)
+);
+alter table chatMessage
+    add constraint chatMessage_chatroomId
+        foreign key (chat_id) references chatroom(id);
+
+alter table chatMessage
+    add constraint chatMessage_senderId
+        foreign key (sender_id) references user_data(id);
+
+alter table chatMessage
+    add constraint chatMessage_recipientId
+        foreign key (recipient_id) references user_data(id);
+
+create table requests (
                       id int8 not null,
-                      reg_num varchar(255),
-                      brand_id int8,
-                      model_id int8,
-                      body_id int8,
-                      transport_id int8,
+                      request_text text not null,
+                      decision text,
+                      created timestamp,
+                      meeting_time timestamp,
+                      status int8 not null,
+                      user_id varchar(255) not null,
+                      user_specialist_id varchar(255) not null,
                       primary key (id)
 );
 
-create table cities (
-                        id int8 not null,
-                        name varchar(255),
-                        region_id int8,
-                        primary key (id)
-);
+alter table requests
+    add constraint requests_user_id
+        foreign key (user_id) references user_data(id);
 
-create table model_of_cars (
-                               id int8 not null,
-                               name varchar(255),
-                               brand_id int8,
-                               primary key (id)
-);
+alter table requests
+    add constraint requests_user_specialist_id
+        foreign key (user_specialist_id) references user_data(id);
 
-create table regions (
-                         id int8 not null,
-                         name varchar(255),
-                         primary key (id)
-);
-
-create table statuses (
+create table requestsSpecialist (
                           id int8 not null,
-                          name varchar(255),
+                          requestText text not null,
+                          decision text,
+                          created timestamp,
+                          status int8 not null,
+                          user_id varchar(255) not null,
                           primary key (id)
 );
 
-create table streets (
-                         id int8 not null,
-                         name varchar(255),
-                         city_id int8,
-                         primary key (id)
-);
-
-create table type_of_bodies (
-                                id int8 not null,
-                                name varchar(255),
-                                primary key (id)
-);
-
-create table type_of_road_objects (
-                                      id int8 not null,
-                                      name varchar(255),
-                                      primary key (id)
-);
-
-create table type_of_transports (
-                                    id int8 not null,
-                                    name varchar(255),
-                                    primary key (id)
-);
-
-create table images (
-                        id int8 not null,
-                        path varchar(255),
-                        primary key (id)
-);
-
-create table comments (
-                          id int8 not null,
-                          text varchar(255),
-                          user_id varchar(255),
-                          primary key (id)
-);
+alter table requestsSpecialist
+    add constraint requestsSpecialist_user_id
+        foreign key (user_id) references user_data(id);

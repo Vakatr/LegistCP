@@ -1,47 +1,47 @@
-package com.amr.chatservice.service;
+package com.legist.myapp.service;
 
-import com.amr.chatservice.model.ChatRoom;
-import com.amr.chatservice.repository.ChatRoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.legist.myapp.domain.ChatRoom;
+import com.legist.myapp.dto.ChatRoomDto;
+import com.legist.myapp.repository.ChatRoomRepository;
+import com.legist.myapp.repository.UserDetailsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatRoomService {
 
-    @Autowired private ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserDetailsRepository userDetailsRepository;
 
-    public Optional<String> getChatId(
-            String senderId, String recipientId, boolean createIfNotExist) {
-
-         return chatRoomRepository
-                .findBySenderIdAndRecipientId(senderId, recipientId)
-                .map(ChatRoom::getChatId)
-                 .or(() -> {
-                    if(!createIfNotExist) {
-                        return  Optional.empty();
-                    }
-                     var chatId =
-                            String.format("%s_%s", senderId, recipientId);
-
-                    ChatRoom senderRecipient = ChatRoom
-                            .builder()
-                            .chatId(chatId)
-                            .senderId(senderId)
-                            .recipientId(recipientId)
-                            .build();
-
-                    ChatRoom recipientSender = ChatRoom
-                            .builder()
-                            .chatId(chatId)
-                            .senderId(recipientId)
-                            .recipientId(senderId)
-                            .build();
-                    chatRoomRepository.save(senderRecipient);
-                    chatRoomRepository.save(recipientSender);
-
-                    return Optional.of(chatId);
-                });
+    public ChatRoomService(ChatRoomRepository chatRoomRepository,
+                           UserDetailsRepository userDetailsRepository) {
+        this.chatRoomRepository = chatRoomRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
+
+    public ChatRoom createChatRoom(ChatRoomDto chatRoomDto) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setInitiatorId(userDetailsRepository.findByName(chatRoomDto.getInitiatorId().getName()));
+        chatRoom.setRecipientId(userDetailsRepository.findByName(chatRoomDto.getRecipientId().getName()));
+        return chatRoomRepository.save(chatRoom);
+    }
+
+    public List<ChatRoomDto> getListChatRoom(String id) {
+        return chatRoomRepository.findChatRoomsById(id)
+                .stream()
+                .map(ChatRoomDto::fromChatRoom)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteChatRoom(ChatRoom chatRoom) {
+        chatRoomRepository.deleteById(chatRoom.getId());
+    }
+
+    public ChatRoom findById(Long id) {
+        return chatRoomRepository.findById(id);
+    }
+
 }

@@ -1,46 +1,57 @@
-package com.amr.chatservice.service;
+package com.legist.myapp.service;
 
 import com.amr.chatservice.exception.ResourceNotFoundException;
-import com.amr.chatservice.model.ChatMessage;
-import com.amr.chatservice.model.MessageStatus;
-import com.amr.chatservice.repository.ChatMessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import com.legist.myapp.domain.ChatMessage;
+import com.legist.myapp.dto.ChatMessageDto;
+import com.legist.myapp.domain.MessageStatus;
+import com.legist.myapp.repository.ChatMessageRepository;
+import com.legist.myapp.repository.UserDetailsRepository;
+
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatMessageService {
-    @Autowired private ChatMessageRepository repository;
-    @Autowired private ChatRoomService chatRoomService;
-    @Autowired private MongoOperations mongoOperations;
+     private final ChatMessageRepository repository;
+     private final ChatRoomService chatRoomService;
+     private final UserDetailsRepository userDetailsRepository;
 
-    public ChatMessage save(ChatMessage chatMessage) {
+    public ChatMessageService(ChatMessageRepository repository, ChatRoomService chatRoomService, UserDetailsRepository userDetailsRepository) {
+        this.repository = repository;
+        this.chatRoomService = chatRoomService;
+        this.userDetailsRepository = userDetailsRepository;
+    }
+
+
+    public ChatMessage createChatMessage(ChatMessageDto chatMessageDto) {
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setChatId(chatMessageDto.getChatId().toChatRoom());
+        chatMessage.setContent(chatMessageDto.getContent());
+        chatMessage.setRecipientName(chatMessageDto.getRecipientName());
+        chatMessage.setSenderName(chatMessageDto.getSenderName());
+        chatMessage.setDatemessage(LocalDateTime.now());
+        chatMessage.setRecipientId(userDetailsRepository.findByName(chatMessageDto.getRecipientId().getName()));
+        chatMessage.setSenderId(userDetailsRepository.findByName(chatMessageDto.getSenderId().getName()));
         chatMessage.setStatus(MessageStatus.RECEIVED);
         repository.save(chatMessage);
         return chatMessage;
     }
 
-    public long countNewMessages(String senderId, String recipientId) {
+/*    public long countNewMessages(String senderId, String recipientId) {
+
         return repository.countBySenderIdAndRecipientIdAndStatus(
                 senderId, recipientId, MessageStatus.RECEIVED);
-    }
+    }*/
 
-    public List<ChatMessage> findChatMessages(String senderId, String recipientId) {
-        var chatId = chatRoomService.getChatId(senderId, recipientId, false);
-
-        var messages =
-                chatId.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
-
-        if(messages.size() > 0) {
-            updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
-        }
-
-        return messages;
+    public List<ChatMessageDto> findChatMessages(Long id) {
+        updateStatuses(id, MessageStatus.DELIVERED);
+        return repository.findByChatId(id)
+                .stream()
+                .map(ChatMessageDto::fromChatMessage)
+                .collect(Collectors.toList());
     }
 
     public ChatMessage findById(String id) {
@@ -54,12 +65,13 @@ public class ChatMessageService {
                         new ResourceNotFoundException("can't find message (" + id + ")"));
     }
 
-    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
-        Query query = new Query(
-                Criteria
-                        .where("senderId").is(senderId)
-                        .and("recipientId").is(recipientId));
-        Update update = Update.update("status", status);
-        mongoOperations.updateMulti(query, update, ChatMessage.class);
+    public void updateStatuses(Long id, MessageStatus status) {
+        List<ChatMessage> messages =
+                repository.findByChatId(id);
+        for (ChatMessage message:messages) {
+            message.setStatus(status);
+        }
+        repository.saveAll(messages);
+
     }
 }

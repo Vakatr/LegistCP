@@ -1,29 +1,49 @@
-package com.amr.chatservice.controller;
+package com.legist.myapp.controller;
 
-import com.amr.chatservice.model.ChatMessage;
-import com.amr.chatservice.model.ChatNotification;
-import com.amr.chatservice.service.ChatMessageService;
-import com.amr.chatservice.service.ChatRoomService;
+import com.legist.myapp.domain.ChatMessage;
+import com.legist.myapp.domain.MessageStatus;
+import com.legist.myapp.dto.ChatMessageDto;
+import com.legist.myapp.dto.ChatRoomDto;
+import com.legist.myapp.dto.NewsDto;
+import com.legist.myapp.dto.UserDto;
+import com.legist.myapp.repository.ChatMessageRepository;
+import com.legist.myapp.repository.ChatRoomRepository;
+import com.legist.myapp.service.ChatMessageService;
+import com.legist.myapp.service.ChatRoomService;
+import com.legist.myapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/api/v1/chat/")
 public class ChatController {
 
-    @Autowired private SimpMessagingTemplate messagingTemplate;
-    @Autowired private ChatMessageService chatMessageService;
-    @Autowired private ChatRoomService chatRoomService;
+    private final UserService userService;
+    private final ChatRoomService chatRoomService;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageService chatMessageService;
+    private final ChatMessageRepository chatMessageRepository;
 
-    @MessageMapping("/chat")
+    @Autowired
+    public ChatController(UserService userService, ChatRoomService chatRoomService, ChatRoomRepository chatRoomRepository, ChatMessageService chatMessageService, ChatMessageRepository chatMessageRepository) {
+        this.userService = userService;
+        this.chatRoomService = chatRoomService;
+        this.chatRoomRepository = chatRoomRepository;
+        this.chatMessageService = chatMessageService;
+        this.chatMessageRepository = chatMessageRepository;
+    }
+
+   /* @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
-        var chatId = chatRoomService
-                .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
+        var chatId = ChatRoomService(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
         chatMessage.setChatId(chatId.get());
 
         ChatMessage saved = chatMessageService.save(chatMessage);
@@ -34,26 +54,56 @@ public class ChatController {
                         saved.getSenderId(),
                         saved.getSenderName()));
     }
-
-    @GetMapping("/messages/{senderId}/{recipientId}/count")
-    public ResponseEntity<Long> countNewMessages(
+*/
+   /* @GetMapping("/chatrooms")
+    public List<> countNewMessages(
             @PathVariable String senderId,
             @PathVariable String recipientId) {
 
         return ResponseEntity
                 .ok(chatMessageService.countNewMessages(senderId, recipientId));
+    }*/
+   @GetMapping(value = "/chatrooms")
+   public ResponseEntity<List<ChatRoomDto>> getCharRooms(@AuthenticationPrincipal Principal principal) {
+       String name = principal.getName();
+       UserDto userDto = UserDto.fromUser(userService.findByName(name));
+       if (userDto.getName() == null) {
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
+       List<ChatRoomDto> result = chatRoomService.getListChatRoom(userDto.getId());
+       return result.size() != 0 ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   }
+
+    @PostMapping("/chatroom/create/{RecipientName}")
+    public ResponseEntity<ChatRoomDto> create(@PathVariable String RecipientName, @AuthenticationPrincipal Principal principal) {
+        ChatRoomDto chatRoomDto = new ChatRoomDto();
+        UserDto IniciatorUser = UserDto.fromUser(userService.findByName(principal.getName()));
+        UserDto RecipientUser = UserDto.fromUser(userService.findByName(RecipientName));
+        chatRoomDto.setInitiatorId(IniciatorUser);
+        chatRoomDto.setRecipientId(RecipientUser);
+        chatRoomDto = chatRoomDto.fromChatRoom(chatRoomService.createChatRoom(chatRoomDto));
+        return chatRoomDto.getId() != null ? new ResponseEntity<>(chatRoomDto, HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages ( @PathVariable String senderId,
-                                                @PathVariable String recipientId) {
-        return ResponseEntity
-                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+    @GetMapping("/chatroom/{IdChat}")
+    public ResponseEntity<List<ChatMessageDto>> getChatMessage (@PathVariable Long IdChat) {
+       List<ChatMessageDto> result = chatMessageService.findChatMessages(IdChat);
+       return result.size() != 0 ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/messages/{id}")
-    public ResponseEntity<?> findMessage ( @PathVariable String id) {
-        return ResponseEntity
-                .ok(chatMessageService.findById(id));
+    @PostMapping("/sendmessage")
+    public ResponseEntity<ChatMessageDto> SendMessage(@RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal Principal principal) {
+        UserDto userDto = UserDto.fromUser(userService.findByName(principal.getName()));
+        UserDto RecipientUser = UserDto.fromUser(userService.findByName(chatMessageDto.getRecipientName()));
+        chatMessageDto.setRecipientName(RecipientUser.getName());
+        chatMessageDto.setRecipientId(RecipientUser);
+        chatMessageDto.setSenderId(userDto);
+        ChatRoomDto chatRoomDto = ChatRoomDto.fromChatRoom(chatRoomService.findById(chatMessageDto.getChatId().getId()));
+        chatMessageDto.setChatId(chatRoomDto);
+        chatMessageDto.setSenderName(userDto.getName());
+        chatMessageDto.setDatemessage(LocalDateTime.now());
+        chatMessageDto.setStatus(MessageStatus.RECEIVED);
+        chatMessageDto = chatMessageDto.fromChatMessage(chatMessageService.createChatMessage(chatMessageDto));
+        return chatMessageDto.getId() != null ? new ResponseEntity<>(chatMessageDto, HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

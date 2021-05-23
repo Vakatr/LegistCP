@@ -1,4 +1,4 @@
-package com.amr.chatservice.model;
+package com.legist.myapp.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
