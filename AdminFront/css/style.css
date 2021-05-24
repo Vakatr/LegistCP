@@ -225,7 +225,7 @@ transform: translateX(1%);
   color: #ffffff !important;
 }
 .block-btn-create {
-  margin-top: 30px;
+  margin: 18px 0;
 }
 
 /* Стили таблицы в новостях и пользователях */
@@ -355,3 +355,14 @@ i.icon-upload {
 .upload-style .js-input-file{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
 .upload-style .js-input-file + .js-labelFile{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 10px;cursor:pointer}
 /* END Стилизация input type=file END */
+
+
+
+#success-in-site {
+  width: 100%;
+  margin: auto;
+}
+
+#success-in-site .alert {
+  padding: 7px 20px;
+}

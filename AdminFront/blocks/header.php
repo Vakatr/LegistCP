@@ -1,6 +1,7 @@
 <? require $_SERVER['DOCUMENT_ROOT'] . "/init.php" ?>
-<? if (substr_count($_SERVER['REQUEST_URI'], '/') <= 2):?>
-  <? include $_SERVER['DOCUMENT_ROOT'] . $_SERVER['REQUEST_URI'] . "/api.php" ?>
+<? if (substr_count($_SERVER['REQUEST_URI'], '/') <= 3):?>
+<? $REQUEST_URI = explode('?', $_SERVER['REQUEST_URI']); ?>
+  <? include $_SERVER['DOCUMENT_ROOT'] . $REQUEST_URI[0] . "/api.php" ?>
 <? endif ?>
 <!DOCTYPE html>
 <html lang='ru'>

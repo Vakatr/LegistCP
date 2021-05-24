@@ -1,6 +1,10 @@
 <? require $_SERVER['DOCUMENT_ROOT'] . "/blocks/header.php" ?>
 
-<? include "modals/modal-delete.php" ?>
+
+<div class="txt-right block-btn-create">
+  <a href="create/" class="btn btn-primary btn-add">Добавить новость</a>
+</div>
+
 <table class="news-table">
   <thead>
     <tr>
@@ -13,14 +17,15 @@
     </tr>
   </thead>
   <tbody>
-    <? for ($i = 0; $i<15; $i++): ?>
+    <? for ($i = 0; $i < count($server_answer); $i++): ?>
       <tr>
-        <td>Это ID</td>
-        <td>Тестовая новость</td>
-        <td>25.04.1971</td>
-        <td>01.02.2020</td>
-        <td  class="btn-table-no-padd"><a href="edit/"> <div class="btn-item-edit"></div></a></td>
-        <td class="btn-table-no-padd"><div class="btn-item-delete" data-toggle="modal" data-target="#Modal_Delete"></div></td>
+        <td><?= $server_answer[$i]->id ?></td>
+        <td><?= $server_answer[$i]->title ?></td>
+        <td><?= $server_answer[$i]->dateOfCreated ?></td>
+        <td><?= $server_answer[$i]->dateOfUpdated ?></td>
+        <td  class="btn-table-no-padd"><a href="edit?id=<?= (int) $server_answer[$i]->id ?>"> <div class="btn-item-edit"></div></a></td>
+        <td class="btn-table-no-padd"><div class="btn-item-delete" data-toggle="modal" data-target="#Modal_Delete<?= $i ?>"></div></td>
+        <? include "modals/modal-delete.php" ?>
       </tr>
   <? endfor ?>
   </tbody>
@@ -36,8 +41,6 @@
   </tfoot>
 </table>
 
-<div class="txt-right block-btn-create">
-  <a href="create/" class="btn btn-primary btn-add">Добавить новость</a>
-</div>
+
 
 <? require $_SERVER['DOCUMENT_ROOT'] . "/blocks/footer.php" ?>
