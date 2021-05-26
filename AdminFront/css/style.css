@@ -293,6 +293,12 @@ table.news-table tfoot   tr td:first-child {
   background: url(/img/btn-edit.png) no-repeat center center;
   cursor: pointer;
 }
+.btn-item-view {
+  height: 24px;
+  width: 24px;
+  background: url(/img/icon-eye.png) no-repeat center center;
+  cursor: pointer;
+}
 .btn-table-no-padd {
   padding: 3px !important;
 }
@@ -365,4 +371,12 @@ i.icon-upload {
 
 #success-in-site .alert {
   padding: 7px 20px;
+}
+
+.img-in-news {
+  margin: auto;
+  width: 50%;
+  display: block;
+  border: 5px solid #b88785;
+  border-radius: 15%;
 }

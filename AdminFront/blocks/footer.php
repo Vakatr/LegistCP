@@ -18,6 +18,7 @@
                 <ul class="nav-footer">
                   <li><a href="/users" class="root-item">Пользователи</a></li>
                   <li><a href="/news" class="root-item">Новости</a></li>
+                    <li><a href="/applications" class="root-item">Заявки</a></li>
                 </ul>
               </div>
 

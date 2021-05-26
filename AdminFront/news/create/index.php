@@ -10,7 +10,7 @@
 <? endif ?>
 
 <? if (!$arResult['SUCCESS']): ?>
-  <form method="POST" name="create-news-form" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" name="create-news-form" enctype="multipart/form-data">
     <div class="content-create">
       <div class="input-group">
         <div class="col-md-2 label-form">
@@ -31,7 +31,7 @@
       <div class="input-group upload-style">
         <div class="col-md-2 label-form"><label>Картинка:</label></div>
           <div class="col-md-10">
-            <input type="file" name="file-news" id="file" class="js-input-file" />
+            <input type="file" accept="image/*" name="file-news" id="file" class="js-input-file" />
             <label for="file" class="btn btn-tertiary js-labelFile">
               <i class='icon icon-upload'></i>
               <span class="js-fileName">Загрузить файл</span>
