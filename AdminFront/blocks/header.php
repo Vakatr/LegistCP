@@ -32,9 +32,6 @@ switch ($URL){
   case '/applications/':
     $Title = "Список заявок";
   break;
-  case '/applications/edit/':
-    $Title = "Просмотр заявки";
-  break;
  } ?>
 
   <head>
