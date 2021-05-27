@@ -378,7 +378,7 @@ i.icon-upload {
   width: 50%;
   display: block;
   border: 5px solid #b88785;
-  border-radius: 15%;
+  border-radius: 10px;
 }
 
 .radio-buttons {
