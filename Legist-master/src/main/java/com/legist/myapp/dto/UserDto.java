@@ -18,6 +18,8 @@ public class UserDto {
     private String aboutSelf;
     private String email;
     private String gender;
+    private String education;
+    private String directionOfActivity;
     private String locale;
     private Status status;
     private LocalDateTime lastVisit;
@@ -31,6 +33,8 @@ public class UserDto {
         user.setLastName(lastName);
         user.setAboutSelf(aboutSelf);
         user.setEmail(email);
+        user.setEducation(education);
+        user.setDirectionOfActivity(directionOfActivity);
         user.setGender(gender);
         user.setLocale(locale);
         user.setStatus(status);
@@ -47,6 +51,8 @@ public class UserDto {
         userDto.setLastName(user.getLastName());
         userDto.setAboutSelf(user.getAboutSelf());
         userDto.setEmail(user.getEmail());
+        userDto.setEducation(user.getEducation());
+        userDto.setDirectionOfActivity(user.getDirectionOfActivity());
         userDto.setGender(user.getGender());
         userDto.setLocale(user.getLocale());
         userDto.setStatus(user.getStatus());
@@ -56,6 +62,22 @@ public class UserDto {
     }
 
     public UserDto() {
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getDirectionOfActivity() {
+        return directionOfActivity;
+    }
+
+    public void setDirectionOfActivity(String directionOfActivity) {
+        this.directionOfActivity = directionOfActivity;
     }
 
     public String getId() {

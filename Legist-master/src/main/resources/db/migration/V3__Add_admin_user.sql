@@ -18,4 +18,7 @@ VALUES ('10', 'user2', 'User2', 'Test', '$2a$08$xiubgeYqFLLIhOYKAVEUM.dL578Ct3L9
 insert into user_roles(user_id, role_id)
 values (1, 1),
        (2, 2),
-       (3, 3);
+       (3, 3),
+       (5, 1),
+       (10, 1)
+       ;

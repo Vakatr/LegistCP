@@ -2,11 +2,14 @@ package com.legist.myapp.controller;
 
 import com.legist.myapp.domain.Requests;
 import com.legist.myapp.domain.RequestsSpecialist;
+import com.legist.myapp.domain.Role;
+import com.legist.myapp.domain.User;
 import com.legist.myapp.dto.RequestDto;
 import com.legist.myapp.dto.RequestSpecialistDto;
 import com.legist.myapp.dto.UserDto;
 import com.legist.myapp.repository.RequestRepository;
 import com.legist.myapp.repository.RequestSpecialistRepository;
+import com.legist.myapp.repository.RoleRepository;
 import com.legist.myapp.service.RequestsService;
 import com.legist.myapp.service.RequestsSpecialistService;
 import com.legist.myapp.service.UserService;
@@ -18,6 +21,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,12 +33,15 @@ public class RequestLegistRestController {
     private final UserService userService;
     private final RequestsSpecialistService requestsService;
     private final RequestSpecialistRepository requestRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public RequestLegistRestController(UserService userService,
                                        RequestsSpecialistService requestsService,
-                                       RequestSpecialistRepository requestRepository) {
+                                       RequestSpecialistRepository requestRepository,
+                                       RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
         this.requestsService = requestsService;
         this.requestRepository = requestRepository;
     }
@@ -58,6 +66,17 @@ public class RequestLegistRestController {
     public ResponseEntity<RequestSpecialistDto> update(@PathVariable("id") RequestsSpecialist requestFromDb,
                                              @RequestBody RequestsSpecialist requests) {
         RequestSpecialistDto result = RequestSpecialistDto.fromRequest(requestsService.updateRequest(requestFromDb, requests));
+        if (requests.getStatus().equals("Принят"))
+        {
+            User UserLegist = userService.findByName(result.getUserId().getName());
+            UserLegist.setUpdated(LocalDateTime.now());
+            Role role = roleRepository.findByName("LEGIST");
+            ArrayList<Role> rolelist = new ArrayList<>();
+            rolelist.add(role);
+            UserLegist.setRoles(rolelist);
+            userService.save(UserLegist);
+            result.setUserId(UserDto.fromUser(UserLegist));
+        }
         return result.getId() != null ? new ResponseEntity<RequestSpecialistDto>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
