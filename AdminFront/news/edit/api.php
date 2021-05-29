@@ -23,16 +23,36 @@ if ($_REQUEST['id'])
       $server_answer = $objects_answer[$key];
     }
   }
+
 }
 
 if ($_REQUEST['submit_update_button'] && $_REQUEST['id'])
 {
+  if ($_FILES['file-news']['error'] == '0')
+  {
+    $url = $SERVER_URL . '/file/upload';
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => array('file'=> new CURLFILE($_FILES['file-news']['tmp_name']))
+  ));
 
-
+    $response = curl_exec($curl);
+    $response = json_decode($response);
+    curl_close($curl);
+  }
 
     $ArCreateData = array(
       'title' => $_REQUEST['heading'],
-      'text' => $_REQUEST['description-news']
+      'text' => $_REQUEST['description-news'],
+      'file' => $response->key ? $response->key : $server_answer->file
     );
     $ArCreateDataJson = json_encode($ArCreateData);
 
@@ -50,7 +70,7 @@ if ($_REQUEST['submit_update_button'] && $_REQUEST['id'])
   curl_exec($curl);
   $status_answer = curl_getinfo($curl, CURLINFO_HTTP_CODE);
   curl_close($curl);
-  
+
   if ($status_answer == '200')
   {
     $arResult["SUCCESS"] = 'Новость успешно обновлена.';
