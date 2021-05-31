@@ -1,6 +1,5 @@
 <? require $_SERVER['DOCUMENT_ROOT'] . "/blocks/header.php" ?>
 
-<? include "modals/modal-delete.php" ?>
 <table class="news-table">
   <thead>
     <tr>
@@ -11,28 +10,25 @@
       <td>Статус</td>
       <td>Роль</td>
       <td width="25px"></td>
-      <td width="25px"></td>
     </tr>
   </thead>
   <tbody>
-      <?  $count = 1;?>
-    <? for ($i = 0; $i<count($server_answer); $i++): ?>
-
+    <? $count = 1; ?>
+     <? foreach ($server_answer as $key => $value): ?>
       <tr>
-        <td><?=$count++ ?></td>
-        <td><?= $server_answer[$i]->name ?></td>
-        <td><?= $server_answer[$i]->firstName ?></td>
-        <td><?= $server_answer[$i]->lastName ?></td>
-        <td><?= $server_answer[$i]->status ?></td>
-        <td><?= $server_answer[$i]->roles[0] ?></td>
-        <td  class="btn-table-no-padd"><a href="edit/"> <div class="btn-item-edit"></div></a></td>
-        <td class="btn-table-no-padd"><div class="btn-item-delete" data-toggle="modal" data-target="#Modal_Delete"></div></td>
+        <td><?= $count++; ?></td>
+        <td><?= $value->name ?></td>
+        <td><?= $value->firstName ?></td>
+        <td><?= $value->lastName ?></td>
+        <td><?= $value->status ?></td>
+        <td><?= $value->roles[0] ?></td>
+        <td class="btn-table-no-padd"><div class="btn-item-view" data-toggle="modal" data-target="#Modal_user_info<?= $key ?>"></div></td>
       </tr>
-  <? endfor ?>
+      <? include "modals/modal-user-info.php" ?>
+  <? endforeach ?>
   </tbody>
   <tfoot>
     <tr>
-      <td> </td>
       <td> </td>
       <td> </td>
       <td> </td>
