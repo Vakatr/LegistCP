@@ -36,6 +36,7 @@ public class ChatRoomService {
                 .collect(Collectors.toList());
     }
 
+
     public void deleteChatRoom(ChatRoom chatRoom) {
         chatRoomRepository.deleteById(chatRoom.getId());
     }

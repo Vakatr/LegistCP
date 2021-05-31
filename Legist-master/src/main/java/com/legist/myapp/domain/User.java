@@ -28,6 +28,8 @@ public class User extends BaseEntity implements Serializable {
     private String email;
     @Column(name = "gender")
     private String gender;
+    private String education;
+    private String directionOfActivity;
     @Column(name = "locale")
     private String locale;
     @Column(name = "password")
@@ -49,6 +51,22 @@ public class User extends BaseEntity implements Serializable {
     private LocalDateTime lastVisit;
 
     public User() {
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getDirectionOfActivity() {
+        return directionOfActivity;
+    }
+
+    public void setDirectionOfActivity(String directionOfActivity) {
+        this.directionOfActivity = directionOfActivity;
     }
 
     public String getId() {

@@ -7,6 +7,7 @@ create table news (
                          date_of_created timestamp default current_timestamp,
                          date_of_updated timestamp,
                          id_author varchar(255),
+                         file varchar(255),
                          primary key (id)
 );
 
@@ -61,6 +62,7 @@ create table requests (
                       status int8 not null,
                       user_id varchar(255) not null,
                       user_specialist_id varchar(255) not null,
+                      file varchar(255),
                       primary key (id)
 );
 
@@ -72,16 +74,17 @@ alter table requests
     add constraint requests_user_specialist_id
         foreign key (user_specialist_id) references user_data(id);
 
-create table requestsSpecialist (
+create table requests_Specialist (
                           id int8 not null,
-                          requestText text not null,
+                          request_text text,
                           decision text,
                           created timestamp,
-                          status int8 not null,
+                          status varchar(20) default 'Заявка',
                           user_id varchar(255) not null,
+                          file varchar(255),
                           primary key (id)
 );
 
-alter table requestsSpecialist
+alter table requests_Specialist
     add constraint requestsSpecialist_user_id
         foreign key (user_id) references user_data(id);
